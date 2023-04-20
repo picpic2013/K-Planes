@@ -1,15 +1,17 @@
 config = {
  'expname': 'lego_hybrid',
- 'logdir': './logs/syntheticstatic',
+ 'logdir': './logs/syntheticstatic_from_llff',
  'device': 'cuda:0',
 
- 'data_downsample': 1.0,
+#  'data_downsample': 1.0,
+ 'data_downsample': 4,
  'data_dirs': ['data/nerf_synthetic/lego'],
  'contract': False,
  'ndc': False,
 
  # Optimization settings
- 'num_steps': 30001,
+#  'num_steps': 30001,
+ 'num_steps': 80001,
  'batch_size': 4096,
  'scheduler_type': 'warmup_cosine',
  'optim_type': 'adam',

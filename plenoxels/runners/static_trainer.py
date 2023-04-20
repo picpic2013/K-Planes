@@ -157,7 +157,9 @@ def init_tr_data(data_downsample: float, data_dirs: Sequence[str], **kwargs):
     assert len(data_dirs) == 1
     data_dir = data_dirs[0]
 
-    dset_type = decide_dset_type(data_dir)
+    dset_type = kwargs.get('dset_type', None)
+    if dset_type is None or dset_type == 'auto':
+        dset_type = decide_dset_type(data_dir)
     if dset_type == "synthetic":
         max_tr_frames = parse_optint(kwargs.get('max_tr_frames'))
         dset = SyntheticNerfDataset(

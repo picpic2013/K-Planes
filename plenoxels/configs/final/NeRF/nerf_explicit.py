@@ -1,6 +1,6 @@
 config = {
  'expname': 'lego_explicit',
- 'logdir': './logs/syntheticstatic',
+ 'logdir': './logs/syntheticstatic_1d_nosigmasample',
  'device': 'cuda:0',
 
  'data_downsample': 1.0,
@@ -9,21 +9,23 @@ config = {
  'ndc': False,
 
  # Optimization settings
- 'num_steps': 30001,
+ 'num_steps': 80001,
  'batch_size': 4096,
  'optim_type': 'adam',
  'scheduler_type': 'warmup_cosine',
  'lr': 0.01,
 
  # Regularization
- 'plane_tv_weight': 0.01,
- 'plane_tv_weight_proposal_net': 0.0001,
+#  'plane_tv_weight': 0.01,
+#  'plane_tv_weight_proposal_net': 0.0001,
  'histogram_loss_weight': 1.0,
  'distortion_loss_weight': 0.001,
 
  # Training settings
- 'save_every': 30000,
- 'valid_every': 30000,
+#  'save_every': 30000,
+ 'save_every': 5000,
+#  'valid_every': 30000,
+ 'valid_every': 500,
  'save_outputs': True,
  'train_fp16': True,
 
@@ -47,7 +49,8 @@ config = {
  'linear_decoder': True,
  'linear_decoder_layers': 4,
  'grid_config': [{
-  'grid_dimensions': 2,
+  # 'grid_dimensions': 2,
+  'grid_dimensions': 1,
   'input_coordinate_dim': 3,
   'output_coordinate_dim': 32,
   'resolution': [64, 64, 64]

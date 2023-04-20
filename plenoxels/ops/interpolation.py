@@ -1,6 +1,6 @@
 import torch
 from torch.nn import functional as F
-
+from plenoxels.models.sampler.pic_1d_sampler import pic_1d_sampler
 
 def grid_sample_wrapper(grid: torch.Tensor, coords: torch.Tensor, align_corners: bool = True) -> torch.Tensor:
     grid_dim = coords.shape[-1]
@@ -13,9 +13,11 @@ def grid_sample_wrapper(grid: torch.Tensor, coords: torch.Tensor, align_corners:
 
     if grid_dim == 2 or grid_dim == 3:
         grid_sampler = F.grid_sample
+    elif grid_dim == 1:
+        grid_sampler = pic_1d_sampler()
     else:
         raise NotImplementedError(f"Grid-sample was called with {grid_dim}D data but is only "
-                                  f"implemented for 2 and 3D data.")
+                                  f"implemented for 1, 2 and 3D data.")
 
     coords = coords.view([coords.shape[0]] + [1] * (grid_dim - 1) + list(coords.shape[1:]))
     B, feature_dim = grid.shape[:2]

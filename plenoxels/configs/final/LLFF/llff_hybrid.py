@@ -2,12 +2,12 @@
 # the configuration must be specified in a dictionary called `config`.
 config = {
     "expname": "fortress_hybrid",
-    "logdir": "./logs/staticreal",
+    "logdir": "./logs/staticreal_lego_conf",
     "device": "cuda:0",
 
     # Data settings
     "data_downsample": 4,
-    "data_dirs": ["data/LLFF/fortress"],
+    "data_dirs": ["./data/LLFF/fortress"],
     # Data settings for LLFF
     "hold_every": 8,
     "contract": False,
@@ -32,7 +32,8 @@ config = {
 
     # Training settings
     "train_fp16": True,
-    "save_every": 40000,
+    # "save_every": 40000,
+    "save_every": 10000,
     "valid_every": 40000,
     "save_outputs": True,
 
@@ -45,8 +46,11 @@ config = {
     "use_same_proposal_network": False,
     "use_proposal_weight_anneal": True,
     "proposal_net_args_list": [
-        {"resolution": [128, 128, 128], "num_input_coords": 3, "num_output_coords": 8},
-        {"resolution": [256, 256, 256], "num_input_coords": 3, "num_output_coords": 8},
+        # {"resolution": [128, 128, 128], "num_input_coords": 3, "num_output_coords": 8},
+        # {"resolution": [256, 256, 256], "num_input_coords": 3, "num_output_coords": 8},
+
+        {'num_input_coords': 3, 'num_output_coords': 8, 'resolution': [64, 64, 64]},
+        {'num_input_coords': 3, 'num_output_coords': 8, 'resolution': [128, 128, 128]}
     ],
 
     # Model settings
@@ -55,9 +59,15 @@ config = {
     "concat_features_across_scales": True,
     "linear_decoder": False,
     "grid_config": [{
-        "input_coordinate_dim": 3,
-        "output_coordinate_dim": 16,
-        "grid_dimensions": 2,
-        "resolution": [64, 64, 64],
+        # "input_coordinate_dim": 3,
+        # "output_coordinate_dim": 16,
+        # "grid_dimensions": 2,
+        # "resolution": [64, 64, 64],
+
+
+        'grid_dimensions': 2,
+        'input_coordinate_dim': 3,
+        'output_coordinate_dim': 32,
+        'resolution': [64, 64, 64]
     }],
 }

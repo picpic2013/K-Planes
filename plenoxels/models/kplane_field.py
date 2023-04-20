@@ -63,6 +63,7 @@ def interpolate_ms_features(pts: torch.Tensor,
     grid: nn.ParameterList
     for scale_id, grid in enumerate(ms_grids[:num_levels]):
         interp_space = 1.
+        # interp_space = 0.
         for ci, coo_comb in enumerate(coo_combs):
             # interpolate in plane
             feature_dim = grid[ci].shape[1]  # shape of grid[ci]: 1, out_dim, *reso
@@ -72,6 +73,7 @@ def interpolate_ms_features(pts: torch.Tensor,
             )
             # compute product over planes
             interp_space = interp_space * interp_out_plane
+            # interp_space = interp_space + interp_out_plane
 
         # combine over scales
         if concat_features:

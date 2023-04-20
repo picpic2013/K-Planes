@@ -62,6 +62,7 @@ class LowrankModel(nn.Module):
         self.linear_decoder_layers = linear_decoder_layers
         self.density_act = init_density_activation(density_activation)
         self.timer = CudaTimer(enabled=False)
+        self.forceUniformSample = kwargs.get("force_uniform_sample", False)
 
         self.spatial_distortion: Optional[SpatialDistortion] = None
         if self.is_contracted:
@@ -185,23 +186,29 @@ class LowrankModel(nn.Module):
         #       call below, but they will not be used as long as density-field resolutions
         #       are be 3D.
         ray_samples, weights_list, ray_samples_list = self.proposal_sampler.generate_ray_samples(
-            ray_bundle, timestamps=timestamps, density_fns=self.density_fns)
+            ray_bundle, timestamps=timestamps, density_fns=self.density_fns, forceUniformSample=self.forceUniformSample)
 
-        field_out = self.field(ray_samples.get_positions(), ray_bundle.directions, timestamps)
+        # with torch.no_grad():
+        if True:
+        
+            field_out = self.field(ray_samples.get_positions(), ray_bundle.directions, timestamps)
+        
         rgb, density = field_out["rgb"], field_out["density"]
 
         weights = ray_samples.get_weights(density)
         weights_list.append(weights)
         ray_samples_list.append(ray_samples)
 
-        rgb = self.render_rgb(rgb=rgb, weights=weights, bg_color=bg_color)
-        depth = self.render_depth(weights=weights, ray_samples=ray_samples, rays_d=ray_bundle.directions)
-        accumulation = self.render_accumulation(weights=weights)
-        outputs = {
-            "rgb": rgb,
-            "accumulation": accumulation,
-            "depth": depth,
-        }
+        # with torch.no_grad():
+        if True:
+            rgb = self.render_rgb(rgb=rgb, weights=weights, bg_color=bg_color)
+            depth = self.render_depth(weights=weights, ray_samples=ray_samples, rays_d=ray_bundle.directions)
+            accumulation = self.render_accumulation(weights=weights)
+            outputs = {
+                "rgb": rgb,
+                "accumulation": accumulation,
+                "depth": depth,
+            }
 
         # These use a lot of GPU memory, so we avoid storing them for eval.
         if self.training:

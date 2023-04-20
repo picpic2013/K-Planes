@@ -1,17 +1,22 @@
 config = {
     "expname": "fortress_explicit",
-    "logdir": "./logs/staticreal",
+    "logdir": "./logs/staticreal_explicit_lego_conf_1d_nosigmasample",
+    # "logdir": "./logs/staticreal_explicit_lego_conf_flame",
     "device": "cuda:0",
 
     # Data settings
     "data_downsample": 4,
-    "data_dirs": ["data/LLFF/fortress"],
+    "data_dirs": ["./data/LLFF/fortress"],
+    # "data_dirs": ["/data/hchoDatasets/frames_flame/2"],
     # Data settings for LLFF
     "hold_every": 8,
     "contract": False,
     "ndc": True,
+    # "near_scaling": 0.89,
+    # "ndc_far": 2.6,
     "near_scaling": 0.89,
     "ndc_far": 2.6,
+    # "dset_type": "llff", 
 
     # Optimization settings
     "num_steps": 40_001,
@@ -23,41 +28,61 @@ config = {
     "lr": 2e-2,
 
     # Regularization
-    "plane_tv_weight": 1e-4,
-    "plane_tv_weight_proposal_net": 1e-4,
+    # "plane_tv_weight": 1e-4,
+    # "plane_tv_weight_proposal_net": 1e-4,
     "l1_proposal_net_weight": 0,
     "histogram_loss_weight": 1.0, 
     "distortion_loss_weight": 0.001,
 
     # Training settings
     "train_fp16": True,
-    "save_every": 40000,
-    "valid_every": 40000,
+    # "save_every": 40000,
+    "save_every": 5000,
+    # "valid_every": 40000,
+    "valid_every": 500,
     "save_outputs": True,
 
     # Raymarching settings
     "num_samples": 48,
     "single_jitter": False,
     # proposal sampling
+    "force_uniform_sample": True, 
     "num_proposal_samples": [256, 128],
     "num_proposal_iterations": 2,
     "use_same_proposal_network": False,
     "use_proposal_weight_anneal": True,
     "proposal_net_args_list": [
-        {"resolution": [128, 128, 128], "num_input_coords": 3, "num_output_coords": 8},
-        {"resolution": [256, 256, 256], "num_input_coords": 3, "num_output_coords": 8},
+        # {"resolution": [128, 128, 128], "num_input_coords": 3, "num_output_coords": 8},
+        # {"resolution": [256, 256, 256], "num_input_coords": 3, "num_output_coords": 8},
+
+        {'num_input_coords': 3, 'num_output_coords': 8, 'resolution': [64, 64, 64]},
+        {'num_input_coords': 3, 'num_output_coords': 8, 'resolution': [128, 128, 128]}
     ],
 
     # Model settings
     "multiscale_res": [1, 2, 4, 8],
+    # "multiscale_res": [4, 4, 4, 4],
+    # "multiscale_res": [4],
     "density_activation": "trunc_exp",
     "concat_features_across_scales": True,
     "linear_decoder": True,
-    "linear_decoder_layers": 1,
-    "grid_config": [{
-        "input_coordinate_dim": 3,
-        "output_coordinate_dim": 16,
-        "grid_dimensions": 2,
-        "resolution": [64, 64, 64],
+    
+    # "linear_decoder_layers": 1,
+    # "grid_config": [{
+    #     "input_coordinate_dim": 3,
+    #     "output_coordinate_dim": 16,
+    #     "grid_dimensions": 2,
+    #     "resolution": [64, 64, 64],
+    # }],
+
+    'linear_decoder_layers': 4,
+    'grid_config': [{
+    'grid_dimensions': 2,
+    # 'grid_dimensions': 1,
+    'input_coordinate_dim': 3,
+    'output_coordinate_dim': 32,
+    # 'output_coordinate_dim': 128,
+    # 'output_coordinate_dim': 9,
+    'resolution': [64, 64, 64]
     }],
 }

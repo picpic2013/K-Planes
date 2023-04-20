@@ -462,7 +462,8 @@ class ProposalNetworkSampler(Sampler):
         self,
         ray_bundle: Optional[RayBundle] = None,
         timestamps: Optional[float] = None,
-        density_fns: Optional[List[Callable]] = None,
+        density_fns: Optional[List[Callable]] = None, 
+        forceUniformSample: bool = False
     ) -> Tuple[RaySamples, List, List]:
         assert ray_bundle is not None
         assert density_fns is not None
@@ -478,7 +479,7 @@ class ProposalNetworkSampler(Sampler):
         for i_level in range(n + 1):
             is_prop = i_level < n
             num_samples = self.num_proposal_samples_per_ray[i_level] if is_prop else self.num_nerf_samples_per_ray
-            if i_level == 0:
+            if i_level == 0 or forceUniformSample:
                 # Uniform sampling because we need to start with some samples
                 ray_samples = self.initial_sampler(ray_bundle, num_samples=num_samples)
             else:
